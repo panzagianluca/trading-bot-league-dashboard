@@ -7,9 +7,10 @@ import { BotCard } from "@/components/bot-card";
 
 export default function HomePage() {
   const { bots, stats, error, loading, refetch } = useLeagueData();
-  const active = bots.filter((b) => b.status === "ACTIVE");
+  const standard = bots.filter((b) => b.status === "ACTIVE" && b.bot_type !== "STREAK_HUNTER");
+  const streak = bots.filter((b) => b.bot_type === "STREAK_HUNTER");
   const killed = bots.filter((b) => b.status === "KILLED");
-  const sorted = [...active].sort((a, b) => b.equity_usd - a.equity_usd);
+  const sorted = [...standard].sort((a, b) => b.equity_usd - a.equity_usd);
   const killLine = sorted.length - 4;
   const dangerIds = new Set(sorted.slice(killLine).map((b) => b.id));
 
@@ -46,6 +47,24 @@ export default function HomePage() {
               <BotCard key={bot.id} bot={bot} inDanger={dangerIds.has(bot.id)} />
             ))}
           </div>
+
+          {/* Streak Hunter bots */}
+          {streak.length > 0 && (
+            <>
+              <div className="flex items-center gap-3 my-4">
+                <div className="flex-1 border-t border-amber-400/40" />
+                <span className="text-xs uppercase tracking-widest text-amber-400/70">
+                  &#x1F525; Streak Hunter ({streak.length})
+                </span>
+                <div className="flex-1 border-t border-amber-400/40" />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {streak.map((bot) => (
+                  <BotCard key={bot.id} bot={bot} />
+                ))}
+              </div>
+            </>
+          )}
 
           {/* Killed bots */}
           {killed.length > 0 && (

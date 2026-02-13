@@ -112,6 +112,16 @@ export interface LeagueStats {
   bots_total: number;
 }
 
+export interface StreakInfo {
+  current_streak: number;
+  streak_target: number;
+  shots_remaining: number;
+  shots_total: number;
+  bet_size: number;
+  best_streak: number;
+  total_won: number;
+}
+
 export interface BotSummary {
   id: number;
   name: string;
@@ -123,7 +133,9 @@ export interface BotSummary {
   last_action: string;
   last_tick_ts: string;
   risk_style: string;
+  bot_type: "STANDARD" | "STREAK_HUNTER";
   killed_at: string | null;
+  streak_info: StreakInfo | null;
 }
 
 // ── Parsers ────────────────────────────────────────────────────
@@ -177,7 +189,7 @@ export async function fetchDiary(botId = 1, limit = 10): Promise<DiaryEntry[]> {
 }
 
 export async function fetchAllBots(): Promise<BotSummary[]> {
-  const res = await fetch(bust(`${API_BASE}/api/bots`), NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots?include_killed=true&include_special=true`), NO_CACHE);
   if (!res.ok) throw new Error(`Bots list: ${res.status}`);
   return res.json();
 }

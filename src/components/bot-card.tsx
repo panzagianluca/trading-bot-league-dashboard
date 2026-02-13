@@ -28,6 +28,67 @@ export function BotCard({ bot, inDanger, isKilled }: { bot: BotSummary; inDanger
   const pnlColor = bot.pnl_usd >= 0 ? "text-green-400" : "text-red-400";
   const progressPct = Math.min((bot.equity_usd / 500) * 100, 100);
 
+  // Streak Hunter special card
+  if (bot.bot_type === "STREAK_HUNTER") {
+    const s = bot.streak_info;
+    const streakPct = s ? (s.current_streak / s.streak_target) * 100 : 0;
+    return (
+      <Link href={`/bot/${bot.id}`}>
+        <div className="border border-amber-400/40 bg-amber-400/5 p-3 space-y-2 hover:border-amber-400/60 transition-colors cursor-pointer">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs">&#x1F525;</span>
+              <span className="text-sm font-medium text-amber-400">{bot.name}</span>
+            </div>
+            <Badge variant="outline" className="text-xs px-1.5 py-0 text-amber-400 border-amber-400/40">
+              STREAK
+            </Badge>
+          </div>
+          {s && (
+            <>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Streak</span>
+                  <span className="text-xs font-medium text-amber-400">{s.current_streak}/{s.streak_target}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Shots</span>
+                  <span className="text-xs font-medium">{s.shots_remaining}/{s.shots_total}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Bet</span>
+                  <span className="text-xs font-medium">${s.bet_size.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Best</span>
+                  <span className="text-xs font-medium">{s.best_streak}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Equity</span>
+                  <span className="text-xs font-medium">${bot.equity_usd.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-muted-foreground">Won</span>
+                  <span className="text-xs font-medium text-green-400">${s.total_won.toFixed(2)}</span>
+                </div>
+              </div>
+              {/* Streak progress bar */}
+              <div className="space-y-0.5">
+                <div className="w-full h-1.5 bg-muted overflow-hidden">
+                  <div
+                    className="h-full bg-amber-400 transition-all duration-500"
+                    style={{ width: `${streakPct}%` }}
+                  />
+                </div>
+                <span className="text-[9px] text-amber-400/70">{s.current_streak}/{s.streak_target} wins to goal</span>
+              </div>
+            </>
+          )}
+        </div>
+      </Link>
+    );
+  }
+
   if (isKilled) {
     return (
       <Link href={`/bot/${bot.id}`}>
