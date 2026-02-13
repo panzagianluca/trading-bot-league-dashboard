@@ -33,7 +33,7 @@ export function LeagueNavbar({ stats }: { stats: LeagueStats | null }) {
       {/* Right: Aggregated stats */}
       {stats && (
         <div className="flex items-center gap-4">
-          <NavStat label="Bots" value={`${stats.bots_active}/${stats.bots_active + stats.bots_killed}`} />
+          <NavStat label="Bots" value={`${stats.bots_active}/${stats.bots_total}`} />
           <NavStat label="Equity" value={`$${stats.total_equity_usd.toFixed(2)}`} />
           <NavStat label="Cash" value={`$${stats.total_cash_usd.toFixed(2)}`} />
           <NavStat

@@ -94,6 +94,8 @@ export interface DiaryEntry {
 export interface EquitySnapshot {
   ts: string;
   equity_usd: number;
+  cash_usd: number;
+  unrealized_pnl_usd: number;
 }
 
 export interface LeagueStats {
@@ -106,6 +108,7 @@ export interface LeagueStats {
   total_unrealized_pnl_usd: number;
   bots_active: number;
   bots_killed: number;
+  bots_total: number;
 }
 
 export interface BotSummary {
@@ -119,6 +122,7 @@ export interface BotSummary {
   last_action: string;
   last_tick_ts: string;
   risk_style: string;
+  killed_at: string | null;
 }
 
 // ── Parsers ────────────────────────────────────────────────────
@@ -165,75 +169,22 @@ export async function fetchDiary(botId = 1, limit = 10): Promise<DiaryEntry[]> {
   return res.json();
 }
 
-// ── Placeholder fetchers (will use real endpoints later) ──────
+// ── Real endpoint fetchers ─────────────────────────────────────
 
 export async function fetchAllBots(): Promise<BotSummary[]> {
-  // TODO: Replace with GET /api/bots when available
-  // For now, fetch the single bot we have
-  try {
-    const bot = await fetchBotStatus(1);
-    const profile = parseSelfProfile(bot.self_profile);
-    const decisions = await fetchDecisions(1, 1);
-    return [{
-      id: bot.id,
-      name: bot.name,
-      status: bot.status,
-      equity_usd: bot.equity_usd,
-      cash_usd: bot.cash_usd,
-      unrealized_pnl_usd: bot.unrealized_pnl_usd,
-      pnl_usd: bot.equity_usd - 10,
-      last_action: decisions[0]?.action || "HOLD",
-      last_tick_ts: decisions[0]?.tick_ts || bot.created_at,
-      risk_style: profile?.risk_style || "unknown",
-    }];
-  } catch {
-    return [];
-  }
+  const res = await fetch(`${API_BASE}/api/bots`);
+  if (!res.ok) throw new Error(`Bots list: ${res.status}`);
+  return res.json();
 }
 
 export async function fetchEquityHistory(botId = 1): Promise<EquitySnapshot[]> {
-  // TODO: Replace with GET /api/bots/{id}/equity-history when available
-  // For now, extract from diary equity_at_reflection
-  try {
-    const diary = await fetchDiary(botId, 50);
-    const snapshots: EquitySnapshot[] = [];
-    for (const entry of diary) {
-      const meta = parseReflectionMetadata(entry.metadata);
-      if (meta?.equity_at_reflection != null) {
-        snapshots.push({
-          ts: entry.created_at,
-          equity_usd: meta.equity_at_reflection,
-        });
-      }
-    }
-    // Sort chronologically
-    snapshots.sort((a, b) => new Date(a.ts).getTime() - new Date(b.ts).getTime());
-    return snapshots;
-  } catch {
-    return [];
-  }
+  const res = await fetch(`${API_BASE}/api/bots/${botId}/equity-history`);
+  if (!res.ok) throw new Error(`Equity history: ${res.status}`);
+  return res.json();
 }
 
 export async function fetchLeagueStats(): Promise<LeagueStats> {
-  // TODO: Replace with GET /api/league/stats when available
-  try {
-    const bots = await fetchAllBots();
-    return {
-      round_id: 1,
-      round_name: "Week 1",
-      days_left: 5,
-      total_equity_usd: bots.reduce((s, b) => s + b.equity_usd, 0),
-      total_cash_usd: bots.reduce((s, b) => s + b.cash_usd, 0),
-      total_pnl_usd: bots.reduce((s, b) => s + b.pnl_usd, 0),
-      total_unrealized_pnl_usd: bots.reduce((s, b) => s + b.unrealized_pnl_usd, 0),
-      bots_active: bots.filter((b) => b.status === "ACTIVE").length,
-      bots_killed: bots.filter((b) => b.status === "KILLED").length,
-    };
-  } catch {
-    return {
-      round_id: 1, round_name: "Week 1", days_left: 0,
-      total_equity_usd: 0, total_cash_usd: 0, total_pnl_usd: 0,
-      total_unrealized_pnl_usd: 0, bots_active: 0, bots_killed: 0,
-    };
-  }
+  const res = await fetch(`${API_BASE}/api/league/stats`);
+  if (!res.ok) throw new Error(`League stats: ${res.status}`);
+  return res.json();
 }
