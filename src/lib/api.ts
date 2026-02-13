@@ -44,14 +44,12 @@ export interface Portfolio {
 }
 
 export interface Position {
-  id: number;
   market_id: string;
-  asset: string;
   side: "BUY" | "SELL";
   size_usd: number;
-  entry_price: number;
-  current_price: number;
-  unrealized_pnl: number;
+  avg_entry_price: number;
+  unrealized_pnl_usd: number;
+  opened_at: string;
 }
 
 export interface Decision {

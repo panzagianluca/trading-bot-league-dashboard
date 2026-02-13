@@ -34,20 +34,26 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
             <Table>
               <TableHeader>
                 <TableRow className="text-[10px] uppercase tracking-widest">
-                  <TableHead className="h-8 px-4">Asset</TableHead>
+                  <TableHead className="h-8 px-4">Market</TableHead>
                   <TableHead className="h-8">Side</TableHead>
                   <TableHead className="h-8 text-right">Size</TableHead>
                   <TableHead className="h-8 text-right">Entry</TableHead>
-                  <TableHead className="h-8 text-right">Current</TableHead>
                   <TableHead className="h-8 text-right">PnL</TableHead>
+                  <TableHead className="h-8 text-right">Opened</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {positions.map((p) => {
-                  const pnlColor = p.unrealized_pnl >= 0 ? "text-green-400" : "text-red-400";
+                {positions.map((p, i) => {
+                  const pnlColor = p.unrealized_pnl_usd >= 0 ? "text-green-400" : "text-red-400";
+                  const shortMarket = p.market_id.length > 10
+                    ? `${p.market_id.slice(0, 6)}...${p.market_id.slice(-4)}`
+                    : p.market_id;
+                  const openedAgo = p.opened_at
+                    ? `${Math.round((Date.now() - new Date(p.opened_at).getTime()) / 60000)}m ago`
+                    : "—";
                   return (
-                    <TableRow key={p.id} className="text-xs">
-                      <TableCell className="px-4 py-2 font-medium">{p.asset}</TableCell>
+                    <TableRow key={`${p.market_id}-${i}`} className="text-xs">
+                      <TableCell className="px-4 py-2 font-medium font-mono">{shortMarket}</TableCell>
                       <TableCell className="py-2">
                         <Badge
                           variant={p.side === "BUY" ? "default" : "secondary"}
@@ -57,11 +63,11 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
                         </Badge>
                       </TableCell>
                       <TableCell className="py-2 text-right">${p.size_usd.toFixed(2)}</TableCell>
-                      <TableCell className="py-2 text-right">{p.entry_price.toFixed(2)}</TableCell>
-                      <TableCell className="py-2 text-right">{p.current_price.toFixed(2)}</TableCell>
+                      <TableCell className="py-2 text-right">{p.avg_entry_price.toFixed(2)}</TableCell>
                       <TableCell className={`py-2 text-right font-medium ${pnlColor}`}>
-                        {p.unrealized_pnl >= 0 ? "+" : ""}{p.unrealized_pnl.toFixed(2)}
+                        {p.unrealized_pnl_usd >= 0 ? "+" : ""}${p.unrealized_pnl_usd.toFixed(2)}
                       </TableCell>
+                      <TableCell className="py-2 text-right text-muted-foreground">{openedAgo}</TableCell>
                     </TableRow>
                   );
                 })}
