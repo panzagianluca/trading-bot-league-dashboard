@@ -56,9 +56,6 @@ export function BotSidebar({ bots }: { bots: BotSummary[] }) {
                         <div className={`h-1.5 w-1.5 ${statusColor} ${bot.status === "ACTIVE" ? "animate-pulse" : ""}`} />
                       )}
                       <span className={`text-xs font-medium ${inDanger ? "text-red-400/80" : ""}`}>{bot.name}</span>
-                      <span className={`text-xs ${riskColors[bot.risk_style] || "text-muted-foreground"}`}>
-                        {bot.risk_style}
-                      </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className="text-xs">${bot.equity_usd.toFixed(2)}</span>
