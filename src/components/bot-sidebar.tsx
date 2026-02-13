@@ -13,6 +13,7 @@ const riskColors: Record<string, string> = {
 
 export function BotSidebar({ bots }: { bots: BotSummary[] }) {
   const active = bots.filter((b) => b.status === "ACTIVE");
+  const killed = bots.filter((b) => b.status === "KILLED");
   const sorted = [...active].sort((a, b) => b.equity_usd - a.equity_usd);
   const killLine = sorted.length - 4;
 
@@ -20,7 +21,7 @@ export function BotSidebar({ bots }: { bots: BotSummary[] }) {
     <div className="border-r border-border h-full flex flex-col">
       <div className="px-3 py-2 border-b border-border">
         <span className="text-xs uppercase tracking-widest text-muted-foreground">
-          Bots ({active.length})
+          Bots ({active.length}/{bots.length})
         </span>
       </div>
       <ScrollArea className="flex-1">
@@ -68,6 +69,35 @@ export function BotSidebar({ bots }: { bots: BotSummary[] }) {
               </div>
             );
           })}
+
+          {/* Killed bots section */}
+          {killed.length > 0 && (
+            <>
+              <div className="flex items-center gap-2 px-3 py-1.5 my-1">
+                <div className="flex-1 border-t border-muted-foreground/20" />
+                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">
+                  &#x1FAA6; KILLED ({killed.length})
+                </span>
+                <div className="flex-1 border-t border-muted-foreground/20" />
+              </div>
+              {killed.map((bot) => (
+                <Link key={bot.id} href={`/bot/${bot.id}`}>
+                  <div className="px-3 py-1.5 flex items-center justify-between hover:bg-accent/50 transition-colors cursor-pointer opacity-40">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground w-4">&#x2620;</span>
+                      <span className="text-xs font-medium line-through text-muted-foreground">{bot.name}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-muted-foreground">${bot.equity_usd.toFixed(2)}</span>
+                      <span className="text-xs text-red-400/60">
+                        {bot.pnl_usd.toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </>
+          )}
         </div>
       </ScrollArea>
     </div>

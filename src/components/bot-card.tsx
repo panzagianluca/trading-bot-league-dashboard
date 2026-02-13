@@ -17,7 +17,7 @@ const actionColors: Record<string, string> = {
   HOLD: "text-muted-foreground",
 };
 
-export function BotCard({ bot, inDanger }: { bot: BotSummary; inDanger?: boolean }) {
+export function BotCard({ bot, inDanger, isKilled }: { bot: BotSummary; inDanger?: boolean; isKilled?: boolean }) {
   const statusColor =
     bot.status === "ACTIVE"
       ? "bg-green-400"
@@ -27,6 +27,36 @@ export function BotCard({ bot, inDanger }: { bot: BotSummary; inDanger?: boolean
 
   const pnlColor = bot.pnl_usd >= 0 ? "text-green-400" : "text-red-400";
   const progressPct = Math.min((bot.equity_usd / 500) * 100, 100);
+
+  if (isKilled) {
+    return (
+      <Link href={`/bot/${bot.id}`}>
+        <div className="border border-muted-foreground/20 p-3 space-y-2 hover:border-foreground/20 transition-colors cursor-pointer opacity-40">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs">&#x2620;</span>
+              <span className="text-sm font-medium line-through text-muted-foreground">{bot.name}</span>
+            </div>
+            <Badge variant="outline" className="text-xs px-1.5 py-0 text-muted-foreground">
+              KILLED
+            </Badge>
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+            <div className="flex justify-between">
+              <span className="text-xs text-muted-foreground">Final Equity</span>
+              <span className="text-xs font-medium text-muted-foreground">${bot.equity_usd.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-xs text-muted-foreground">PnL</span>
+              <span className="text-xs font-medium text-red-400/60">
+                {bot.pnl_usd.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link href={`/bot/${bot.id}`}>

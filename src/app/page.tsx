@@ -8,6 +8,7 @@ import { BotCard } from "@/components/bot-card";
 export default function HomePage() {
   const { bots, stats, error, loading, refetch } = useLeagueData();
   const active = bots.filter((b) => b.status === "ACTIVE");
+  const killed = bots.filter((b) => b.status === "KILLED");
   const sorted = [...active].sort((a, b) => b.equity_usd - a.equity_usd);
   const killLine = sorted.length - 4;
   const dangerIds = new Set(sorted.slice(killLine).map((b) => b.id));
@@ -45,7 +46,26 @@ export default function HomePage() {
               <BotCard key={bot.id} bot={bot} inDanger={dangerIds.has(bot.id)} />
             ))}
           </div>
-          {sorted.length === 0 && (
+
+          {/* Killed bots */}
+          {killed.length > 0 && (
+            <>
+              <div className="flex items-center gap-3 my-4">
+                <div className="flex-1 border-t border-muted-foreground/20" />
+                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">
+                  &#x2620; Killed ({killed.length})
+                </span>
+                <div className="flex-1 border-t border-muted-foreground/20" />
+              </div>
+              <div className="grid grid-cols-3 gap-3">
+                {killed.map((bot) => (
+                  <BotCard key={bot.id} bot={bot} isKilled />
+                ))}
+              </div>
+            </>
+          )}
+
+          {sorted.length === 0 && killed.length === 0 && (
             <p className="text-sm text-muted-foreground italic text-center py-16">
               No bots found...
             </p>
