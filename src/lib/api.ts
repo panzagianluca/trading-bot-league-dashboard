@@ -1,4 +1,4 @@
-const API_BASE = "https://youth-donna-cups-damages.trycloudflare.com";
+const API_BASE = "https://tradingleague.share.zrok.io";
 
 // ── Types ──────────────────────────────────────────────────────
 
