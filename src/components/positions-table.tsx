@@ -11,58 +11,63 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function PositionsTable({ positions }: { positions: Position[] }) {
   return (
-    <Card>
-      <CardHeader className="pb-2">
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs uppercase tracking-widest">Open Positions</CardTitle>
           <span className="text-xs text-muted-foreground">{positions.length} active</span>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="p-0 flex-1 min-h-0">
         {positions.length === 0 ? (
-          <p className="text-xs text-muted-foreground italic text-center py-8">
-            Observing the void... no positions yet
-          </p>
+          <div className="h-full flex items-center justify-center">
+            <p className="text-xs text-muted-foreground italic">
+              Observing the void... no positions yet
+            </p>
+          </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="text-[10px] uppercase tracking-widest">
-                <TableHead className="h-8 px-4">Asset</TableHead>
-                <TableHead className="h-8">Side</TableHead>
-                <TableHead className="h-8 text-right">Size</TableHead>
-                <TableHead className="h-8 text-right">Entry</TableHead>
-                <TableHead className="h-8 text-right">Current</TableHead>
-                <TableHead className="h-8 text-right">PnL</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {positions.map((p) => {
-                const pnlColor = p.unrealized_pnl >= 0 ? "text-green-400" : "text-red-400";
-                return (
-                  <TableRow key={p.id} className="text-xs">
-                    <TableCell className="px-4 py-2 font-medium">{p.asset}</TableCell>
-                    <TableCell className="py-2">
-                      <Badge
-                        variant={p.side === "BUY" ? "default" : "secondary"}
-                        className="text-[10px] px-1.5 py-0"
-                      >
-                        {p.side}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="py-2 text-right">${p.size_usd.toFixed(2)}</TableCell>
-                    <TableCell className="py-2 text-right">{p.entry_price.toFixed(2)}</TableCell>
-                    <TableCell className="py-2 text-right">{p.current_price.toFixed(2)}</TableCell>
-                    <TableCell className={`py-2 text-right font-medium ${pnlColor}`}>
-                      {p.unrealized_pnl >= 0 ? "+" : ""}{p.unrealized_pnl.toFixed(2)}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          <ScrollArea className="h-full">
+            <Table>
+              <TableHeader>
+                <TableRow className="text-[10px] uppercase tracking-widest">
+                  <TableHead className="h-8 px-4">Asset</TableHead>
+                  <TableHead className="h-8">Side</TableHead>
+                  <TableHead className="h-8 text-right">Size</TableHead>
+                  <TableHead className="h-8 text-right">Entry</TableHead>
+                  <TableHead className="h-8 text-right">Current</TableHead>
+                  <TableHead className="h-8 text-right">PnL</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {positions.map((p) => {
+                  const pnlColor = p.unrealized_pnl >= 0 ? "text-green-400" : "text-red-400";
+                  return (
+                    <TableRow key={p.id} className="text-xs">
+                      <TableCell className="px-4 py-2 font-medium">{p.asset}</TableCell>
+                      <TableCell className="py-2">
+                        <Badge
+                          variant={p.side === "BUY" ? "default" : "secondary"}
+                          className="text-[10px] px-1.5 py-0"
+                        >
+                          {p.side}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="py-2 text-right">${p.size_usd.toFixed(2)}</TableCell>
+                      <TableCell className="py-2 text-right">{p.entry_price.toFixed(2)}</TableCell>
+                      <TableCell className="py-2 text-right">{p.current_price.toFixed(2)}</TableCell>
+                      <TableCell className={`py-2 text-right font-medium ${pnlColor}`}>
+                        {p.unrealized_pnl >= 0 ? "+" : ""}{p.unrealized_pnl.toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </ScrollArea>
         )}
       </CardContent>
     </Card>

@@ -6,35 +6,40 @@ import {
   Portfolio,
   Decision,
   DiaryEntry,
+  EquitySnapshot,
   fetchBotStatus,
   fetchPortfolio,
   fetchDecisions,
   fetchDiary,
+  fetchEquityHistory,
 } from "@/lib/api";
 
-const POLL_INTERVAL = 60_000; // 60 seconds
+const POLL_INTERVAL = 60_000;
 
-export function useBotData() {
+export function useBotData(botId = 1) {
   const [botStatus, setBotStatus] = useState<BotStatus | null>(null);
   const [portfolio, setPortfolio] = useState<Portfolio | null>(null);
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [diary, setDiary] = useState<DiaryEntry[]>([]);
+  const [equityHistory, setEquityHistory] = useState<EquitySnapshot[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchAll = useCallback(async () => {
     try {
-      const [status, port, decs, diaryEntries] = await Promise.all([
-        fetchBotStatus(),
-        fetchPortfolio(),
-        fetchDecisions(30),
-        fetchDiary(10),
+      const [status, port, decs, diaryEntries, equity] = await Promise.all([
+        fetchBotStatus(botId),
+        fetchPortfolio(botId),
+        fetchDecisions(botId, 30),
+        fetchDiary(botId, 10),
+        fetchEquityHistory(botId),
       ]);
       setBotStatus(status);
       setPortfolio(port);
       setDecisions(decs);
       setDiary(diaryEntries);
+      setEquityHistory(equity);
       setLastUpdated(new Date());
       setError(null);
     } catch (e) {
@@ -42,7 +47,7 @@ export function useBotData() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [botId]);
 
   useEffect(() => {
     fetchAll();
@@ -50,5 +55,8 @@ export function useBotData() {
     return () => clearInterval(interval);
   }, [fetchAll]);
 
-  return { botStatus, portfolio, decisions, diary, lastUpdated, error, loading, refetch: fetchAll };
+  return {
+    botStatus, portfolio, decisions, diary, equityHistory,
+    lastUpdated, error, loading, refetch: fetchAll,
+  };
 }

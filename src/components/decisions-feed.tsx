@@ -65,8 +65,8 @@ export function DecisionsFeed({ decisions }: { decisions: Decision[] }) {
   const totalCount = decisions.length;
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
+    <Card className="h-full flex flex-col">
+      <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs uppercase tracking-widest">Live Thinking</CardTitle>
           <span className="text-[10px] text-muted-foreground">
@@ -74,8 +74,8 @@ export function DecisionsFeed({ decisions }: { decisions: Decision[] }) {
           </span>
         </div>
       </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="h-[500px]">
+      <CardContent className="p-0 flex-1 min-h-0">
+        <ScrollArea className="h-full">
           <div className="p-4 space-y-2">
             {decisions.length === 0 ? (
               <p className="text-xs text-muted-foreground italic text-center py-8">
