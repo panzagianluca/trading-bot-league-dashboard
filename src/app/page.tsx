@@ -7,6 +7,10 @@ import { BotCard } from "@/components/bot-card";
 
 export default function HomePage() {
   const { bots, stats, error, loading } = useLeagueData();
+  const active = bots.filter((b) => b.status === "ACTIVE");
+  const sorted = [...active].sort((a, b) => b.equity_usd - a.equity_usd);
+  const killLine = sorted.length - 4;
+  const dangerIds = new Set(sorted.slice(killLine).map((b) => b.id));
 
   if (loading) {
     return (
@@ -37,11 +41,11 @@ export default function HomePage() {
         {/* Right: 80% bot grid */}
         <div className="flex-1 p-4 overflow-auto">
           <div className="grid grid-cols-3 gap-3">
-            {bots.map((bot) => (
-              <BotCard key={bot.id} bot={bot} />
+            {sorted.map((bot) => (
+              <BotCard key={bot.id} bot={bot} inDanger={dangerIds.has(bot.id)} />
             ))}
           </div>
-          {bots.length === 0 && (
+          {sorted.length === 0 && (
             <p className="text-sm text-muted-foreground italic text-center py-16">
               No bots found...
             </p>

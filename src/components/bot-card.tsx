@@ -17,7 +17,7 @@ const actionColors: Record<string, string> = {
   HOLD: "text-muted-foreground",
 };
 
-export function BotCard({ bot }: { bot: BotSummary }) {
+export function BotCard({ bot, inDanger }: { bot: BotSummary; inDanger?: boolean }) {
   const statusColor =
     bot.status === "ACTIVE"
       ? "bg-green-400"
@@ -30,12 +30,16 @@ export function BotCard({ bot }: { bot: BotSummary }) {
 
   return (
     <Link href={`/bot/${bot.id}`}>
-      <div className="border border-border p-3 space-y-2 hover:border-foreground/30 transition-colors cursor-pointer">
+      <div className={`border p-3 space-y-2 hover:border-foreground/30 transition-colors cursor-pointer ${inDanger ? "border-red-400/40 bg-red-400/5" : "border-border"}`}>
         {/* Header: name + status */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`h-1.5 w-1.5 ${statusColor} ${bot.status === "ACTIVE" ? "animate-pulse" : ""}`} />
-            <span className="text-sm font-medium">{bot.name}</span>
+            {inDanger ? (
+              <span className="text-xs">&#x1F480;</span>
+            ) : (
+              <div className={`h-1.5 w-1.5 ${statusColor} ${bot.status === "ACTIVE" ? "animate-pulse" : ""}`} />
+            )}
+            <span className={`text-sm font-medium ${inDanger ? "text-red-400/80" : ""}`}>{bot.name}</span>
           </div>
           <Badge variant="outline" className={`text-xs px-1.5 py-0 ${riskColors[bot.risk_style] || ""}`}>
             {bot.risk_style}
