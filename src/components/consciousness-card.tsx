@@ -14,8 +14,9 @@ const riskStyleColors: Record<string, string> = {
 };
 
 export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
+  const weights = profile.playbook_weights || {};
   const maxWeight = Math.max(
-    ...Object.values(profile.playbook_weights),
+    ...Object.values(weights),
     0.01
   );
 
@@ -55,7 +56,7 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
               <div className="space-y-0.5">
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Markets</span>
                 <div className="flex gap-1">
-                  {profile.preferred_markets.map((m) => (
+                  {(profile.preferred_markets || []).map((m) => (
                     <Badge key={m} variant="outline" className="text-[10px] px-1.5 py-0">
                       {m}
                     </Badge>
@@ -65,7 +66,7 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
               <div className="space-y-0.5">
                 <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Horizons</span>
                 <div className="flex gap-1">
-                  {profile.preferred_horizons.map((h) => (
+                  {(profile.preferred_horizons || []).map((h) => (
                     <Badge key={h} variant="outline" className="text-[10px] px-1.5 py-0">
                       {h}m
                     </Badge>
@@ -77,7 +78,7 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
             {/* Playbook weights */}
             <div className="space-y-2">
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Strategy Weights</span>
-              {Object.entries(profile.playbook_weights).map(([name, weight]) => (
+              {Object.entries(weights).map(([name, weight]) => (
                 <div key={name} className="space-y-0.5">
                   <div className="flex justify-between text-[10px]">
                     <span className="text-muted-foreground">{name}</span>
