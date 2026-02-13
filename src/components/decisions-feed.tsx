@@ -1,11 +1,11 @@
 "use client";
 
-import { BotDecision } from "@/lib/mock-data";
+import { Decision } from "@/lib/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-function DecisionCard({ d }: { d: BotDecision }) {
+function DecisionCard({ d }: { d: Decision }) {
   const actionColor =
     d.action === "BUY"
       ? "text-green-400"
@@ -16,6 +16,7 @@ function DecisionCard({ d }: { d: BotDecision }) {
   const time = new Date(d.tick_ts).toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
+    second: "2-digit",
   });
 
   return (
@@ -23,59 +24,66 @@ function DecisionCard({ d }: { d: BotDecision }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`text-xs font-medium ${actionColor}`}>{d.action}</span>
-          {d.action !== "HOLD" && (
-            <>
-              <span className="text-xs text-muted-foreground">{d.asset}</span>
-              <Badge variant="outline" className="text-[10px] px-1.5 py-0">
-                {d.horizon_minutes}m
-              </Badge>
-            </>
+          {d.asset && (
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+              {d.asset}
+            </Badge>
+          )}
+          {d.horizon_minutes > 0 && (
+            <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+              {d.horizon_minutes}m
+            </Badge>
+          )}
+          {d.confidence !== null && d.confidence > 0 && (
+            <span className="text-[10px] text-muted-foreground">
+              {(d.confidence * 100).toFixed(0)}%
+            </span>
           )}
         </div>
         <span className="text-[10px] text-muted-foreground">{time}</span>
       </div>
 
-      <div className="space-y-1">
-        <p className="text-xs text-muted-foreground">{d.thesis}</p>
-        {d.news_catalyst && (
-          <p className="text-[10px] text-muted-foreground/70 italic">
-            News: {d.news_catalyst}
-          </p>
-        )}
-      </div>
+      <p className="text-xs text-foreground/70 leading-relaxed">{d.thesis}</p>
 
-      <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-        <span>Conf: {(d.confidence * 100).toFixed(0)}%</span>
-        {d.size_usd > 0 && <span>${d.size_usd.toFixed(2)}</span>}
-        <span>Strategy: {d.selected_strategy}</span>
-      </div>
+      {d.diary_note && (
+        <p className="text-[11px] text-muted-foreground/60 italic border-l border-border pl-2">
+          {d.diary_note}
+        </p>
+      )}
 
-      <div className="flex flex-wrap gap-1">
-        {d.data_sources_used.map((tool) => (
-          <Badge key={tool} variant="outline" className="text-[9px] px-1 py-0 text-muted-foreground">
-            {tool}
-          </Badge>
-        ))}
-      </div>
+      {d.news_catalyst && (
+        <p className="text-[10px] text-muted-foreground/50 italic">
+          Catalyst: {d.news_catalyst}
+        </p>
+      )}
     </div>
   );
 }
 
-export function DecisionsFeed({ decisions }: { decisions: BotDecision[] }) {
+export function DecisionsFeed({ decisions }: { decisions: Decision[] }) {
+  const holdCount = decisions.filter((d) => d.action === "HOLD").length;
+  const totalCount = decisions.length;
+
   return (
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest">Recent Decisions</CardTitle>
-          <span className="text-xs text-muted-foreground">{decisions.length} ticks</span>
+          <CardTitle className="text-xs uppercase tracking-widest">Live Thinking</CardTitle>
+          <span className="text-[10px] text-muted-foreground">
+            {holdCount}/{totalCount} HOLD
+          </span>
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <ScrollArea className="h-[400px]">
+        <ScrollArea className="h-[500px]">
           <div className="p-4 space-y-2">
-            {decisions.map((d, i) => (
-              <DecisionCard key={i} d={d} />
-            ))}
+            {decisions.length === 0 ? (
+              <p className="text-xs text-muted-foreground italic text-center py-8">
+                In stillness, opportunity grows...
+              </p>
+            ) : (
+              decisions.map((d) => <DecisionCard key={d.id} d={d} />)
+            )}
           </div>
         </ScrollArea>
       </CardContent>

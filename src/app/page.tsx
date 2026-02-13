@@ -1,45 +1,54 @@
-import { mockBot, mockLeague } from "@/lib/mock-data";
+"use client";
+
+import { useBotData } from "@/hooks/use-bot-data";
+import { parseSelfProfile } from "@/lib/api";
 import { StatsBar } from "@/components/stats-bar";
-import { EquityChart } from "@/components/equity-chart";
-import { BotStats } from "@/components/bot-stats";
-import { LastAction } from "@/components/last-action";
 import { PositionsTable } from "@/components/positions-table";
 import { DecisionsFeed } from "@/components/decisions-feed";
 import { DiaryFeed } from "@/components/diary-feed";
-import { SelfProfile } from "@/components/self-profile";
+import { ConsciousnessCard } from "@/components/consciousness-card";
 
 export default function Dashboard() {
+  const { botStatus, portfolio, decisions, diary, lastUpdated, error, loading } = useBotData();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-xs text-muted-foreground animate-pulse">Connecting to consciousness...</p>
+      </div>
+    );
+  }
+
+  if (error || !botStatus) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-xs text-red-400">
+          {error || "Failed to reach the bot"}
+        </p>
+      </div>
+    );
+  }
+
+  const selfProfile = parseSelfProfile(botStatus.self_profile);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <StatsBar league={mockLeague} bot={mockBot} />
+      <StatsBar bot={botStatus} lastUpdated={lastUpdated} />
 
       <div className="p-6 space-y-4">
-        {/* Row 1: Equity chart + Performance stats + Last action */}
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-4">
-            <EquityChart data={mockBot.equity_history} />
-          </div>
-          <div className="col-span-5">
-            <BotStats bot={mockBot} />
-          </div>
-          <div className="col-span-3">
-            <LastAction bot={mockBot} />
-          </div>
-        </div>
+        {/* Row 1: Positions */}
+        <PositionsTable positions={portfolio?.positions || []} />
 
-        {/* Row 2: Positions */}
-        <PositionsTable positions={mockBot.positions} />
-
-        {/* Row 3: Decisions feed + Diary + Self profile */}
+        {/* Row 2: Decisions feed + Diary + Consciousness */}
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-5">
-            <DecisionsFeed decisions={mockBot.recent_decisions} />
+            <DecisionsFeed decisions={decisions} />
           </div>
           <div className="col-span-4">
-            <DiaryFeed entries={mockBot.diary_entries} />
+            <DiaryFeed entries={diary} />
           </div>
           <div className="col-span-3">
-            <SelfProfile bot={mockBot} />
+            {selfProfile && <ConsciousnessCard profile={selfProfile} />}
           </div>
         </div>
       </div>
