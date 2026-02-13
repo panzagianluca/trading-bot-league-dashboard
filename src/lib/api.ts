@@ -145,46 +145,50 @@ export function parseReflectionMetadata(raw: string): ReflectionMetadata | null 
 
 // ── Fetchers (cache: no-store to always get fresh data) ───────
 
-const NO_CACHE: RequestInit = { cache: "no-store" };
+const NO_CACHE: RequestInit = { cache: "no-store", headers: { "Cache-Control": "no-cache" } };
+
+function bust(url: string): string {
+  return `${url}${url.includes("?") ? "&" : "?"}_t=${Date.now()}`;
+}
 
 export async function fetchBotStatus(botId = 1): Promise<BotStatus> {
-  const res = await fetch(`${API_BASE}/api/bots/${botId}`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}`), NO_CACHE);
   if (!res.ok) throw new Error(`Bot status: ${res.status}`);
   return res.json();
 }
 
 export async function fetchPortfolio(botId = 1): Promise<Portfolio> {
-  const res = await fetch(`${API_BASE}/api/bots/${botId}/portfolio`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}/portfolio`), NO_CACHE);
   if (!res.ok) throw new Error(`Portfolio: ${res.status}`);
   return res.json();
 }
 
 export async function fetchDecisions(botId = 1, limit = 20): Promise<Decision[]> {
-  const res = await fetch(`${API_BASE}/api/bots/${botId}/decisions?limit=${limit}`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}/decisions?limit=${limit}`), NO_CACHE);
   if (!res.ok) throw new Error(`Decisions: ${res.status}`);
   return res.json();
 }
 
 export async function fetchDiary(botId = 1, limit = 10): Promise<DiaryEntry[]> {
-  const res = await fetch(`${API_BASE}/api/bots/${botId}/diary?limit=${limit}`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}/diary?limit=${limit}`), NO_CACHE);
   if (!res.ok) throw new Error(`Diary: ${res.status}`);
   return res.json();
 }
 
 export async function fetchAllBots(): Promise<BotSummary[]> {
-  const res = await fetch(`${API_BASE}/api/bots`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots`), NO_CACHE);
   if (!res.ok) throw new Error(`Bots list: ${res.status}`);
   return res.json();
 }
 
 export async function fetchEquityHistory(botId = 1): Promise<EquitySnapshot[]> {
-  const res = await fetch(`${API_BASE}/api/bots/${botId}/equity-history`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}/equity-history`), NO_CACHE);
   if (!res.ok) throw new Error(`Equity history: ${res.status}`);
   return res.json();
 }
 
 export async function fetchLeagueStats(): Promise<LeagueStats> {
-  const res = await fetch(`${API_BASE}/api/league/stats`, NO_CACHE);
+  const res = await fetch(bust(`${API_BASE}/api/league/stats`), NO_CACHE);
   if (!res.ok) throw new Error(`League stats: ${res.status}`);
   return res.json();
 }

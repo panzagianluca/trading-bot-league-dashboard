@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { LeagueStats } from "@/lib/api";
 
 function NavStat({ label, value, color }: { label: string; value: string; color?: string }) {
@@ -11,8 +12,17 @@ function NavStat({ label, value, color }: { label: string; value: string; color?
   );
 }
 
+function useClock() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
+
 export function LeagueNavbar({ stats }: { stats: LeagueStats | null }) {
-  const now = new Date();
+  const now = useClock();
   const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   const dayStr = now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
 

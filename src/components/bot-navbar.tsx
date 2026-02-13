@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BotStatus } from "@/lib/api";
 
@@ -10,6 +11,15 @@ function NavStat({ label, value, color }: { label: string; value: string; color?
       <span className={`text-xs font-medium ${color || ""}`}>{value}</span>
     </div>
   );
+}
+
+function useClock() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
 }
 
 export function BotNavbar({ bot, lastUpdated }: { bot: BotStatus; lastUpdated: Date | null }) {
@@ -24,7 +34,7 @@ export function BotNavbar({ bot, lastUpdated }: { bot: BotStatus; lastUpdated: D
   const pnlColor = pnlUsd >= 0 ? "text-green-400" : "text-red-400";
   const progressPct = Math.min((bot.equity_usd / 500) * 100, 100);
 
-  const now = new Date();
+  const now = useClock();
   const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
   const dayStr = now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
 

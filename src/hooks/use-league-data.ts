@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { BotSummary, LeagueStats, fetchAllBots, fetchLeagueStats } from "@/lib/api";
 
-const POLL_INTERVAL = 60_000;
+const POLL_INTERVAL = 30_000;
 
 export function useLeagueData() {
   const [bots, setBots] = useState<BotSummary[]>([]);
