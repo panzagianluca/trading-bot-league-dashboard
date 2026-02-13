@@ -13,7 +13,7 @@ function Stat({ label, value, color }: { label: string; value: string; color?: s
 }
 
 export function StatsCard({ bot }: { bot: BotStatus }) {
-  const pnlUsd = bot.equity_usd - 10;
+  const pnlUsd = bot.pnl_usd;
   const pnlColor = pnlUsd >= 0 ? "text-green-400" : "text-red-400";
   const unrealizedColor = bot.unrealized_pnl_usd >= 0 ? "text-green-400" : "text-red-400";
   const progressPct = Math.min((bot.equity_usd / 500) * 100, 100);

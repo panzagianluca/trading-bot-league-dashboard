@@ -28,9 +28,12 @@ export interface BotStatus {
   status: "ACTIVE" | "KILLED" | "PAUSED";
   self_profile: string; // JSON string — parse with parseSelfProfile
   created_at: string;
+  initial_equity: number;
   equity_usd: number;
   cash_usd: number;
   unrealized_pnl_usd: number;
+  pnl_usd: number;
+  killed_at: string | null;
 }
 
 export interface Portfolio {
