@@ -11,7 +11,7 @@ export default function HomePage() {
   if (loading) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-xs text-muted-foreground animate-pulse">Loading league...</p>
+        <p className="text-sm text-muted-foreground animate-pulse">Loading league...</p>
       </div>
     );
   }
@@ -19,7 +19,7 @@ export default function HomePage() {
   if (error) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-xs text-red-400">{error}</p>
+        <p className="text-sm text-red-400">{error}</p>
       </div>
     );
   }
@@ -42,7 +42,7 @@ export default function HomePage() {
             ))}
           </div>
           {bots.length === 0 && (
-            <p className="text-xs text-muted-foreground italic text-center py-16">
+            <p className="text-sm text-muted-foreground italic text-center py-16">
               No bots found...
             </p>
           )}

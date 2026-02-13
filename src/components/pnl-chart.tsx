@@ -8,10 +8,10 @@ export function PnlChart({ data }: { data: EquitySnapshot[] }) {
     return (
       <Card className="h-full flex flex-col">
         <CardHeader className="pb-2">
-          <CardTitle className="text-xs uppercase tracking-widest">PnL History</CardTitle>
+          <CardTitle className="text-sm uppercase tracking-widest">PnL History</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex items-center justify-center">
-          <p className="text-xs text-muted-foreground italic">
+          <p className="text-sm text-muted-foreground italic">
             Awaiting first snapshot...
           </p>
         </CardContent>
@@ -75,10 +75,10 @@ export function PnlChart({ data }: { data: EquitySnapshot[] }) {
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest">PnL History</CardTitle>
+          <CardTitle className="text-sm uppercase tracking-widest">PnL History</CardTitle>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-muted-foreground">{data.length} pts</span>
-            <span className={`text-xs ${isUp ? "text-green-400" : "text-red-400"}`}>
+            <span className="text-xs text-muted-foreground">{data.length} pts</span>
+            <span className={`text-sm ${isUp ? "text-green-400" : "text-red-400"}`}>
               {isUp ? "+" : ""}{changePct}%
             </span>
           </div>
@@ -87,7 +87,7 @@ export function PnlChart({ data }: { data: EquitySnapshot[] }) {
       <CardContent className="flex-1 min-h-0 flex flex-col pb-3 overflow-hidden">
         <div className="flex items-end justify-between mb-2 shrink-0">
           <span className="text-lg font-medium">${lastVal.toFixed(2)}</span>
-          <span className={`text-xs ${isUp ? "text-green-400" : "text-red-400"}`}>
+          <span className={`text-sm ${isUp ? "text-green-400" : "text-red-400"}`}>
             {isUp ? "+" : ""}{change.toFixed(4)}
           </span>
         </div>
@@ -96,7 +96,7 @@ export function PnlChart({ data }: { data: EquitySnapshot[] }) {
             {chartSvg}
           </div>
         </div>
-        <div className="flex justify-between text-[10px] text-muted-foreground mt-1 shrink-0">
+        <div className="flex justify-between text-xs text-muted-foreground mt-1 shrink-0">
           <span>{new Date(data[0].ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
           <span>{new Date(data[data.length - 1].ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
         </div>

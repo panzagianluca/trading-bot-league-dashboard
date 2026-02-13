@@ -6,8 +6,8 @@ import { LeagueStats } from "@/lib/api";
 function NavStat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
-      <span className={`text-xs font-medium ${color || ""}`}>{value}</span>
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className={`text-sm font-medium ${color || ""}`}>{value}</span>
     </div>
   );
 }
@@ -30,14 +30,14 @@ export function LeagueNavbar({ stats }: { stats: LeagueStats | null }) {
     <div className="border-b border-border h-12 px-4 flex items-center justify-between shrink-0">
       {/* Left: time + day */}
       <div className="flex items-center gap-3">
-        <span className="text-[10px] text-muted-foreground">
+        <span className="text-xs text-muted-foreground">
           {dayStr} {timeStr}
         </span>
       </div>
 
       {/* Center: Title */}
       <div className="absolute left-1/2 -translate-x-1/2">
-        <span className="text-xs font-medium uppercase tracking-widest">Trading Bot League</span>
+        <span className="text-sm font-medium uppercase tracking-widest">Trading Bot League</span>
       </div>
 
       {/* Right: Aggregated stats */}

@@ -17,7 +17,7 @@ export function BotSidebar({ bots }: { bots: BotSummary[] }) {
   return (
     <div className="border-r border-border h-full flex flex-col">
       <div className="px-3 py-2 border-b border-border">
-        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+        <span className="text-xs uppercase tracking-widest text-muted-foreground">
           Bots ({bots.length})
         </span>
       </div>
@@ -36,16 +36,16 @@ export function BotSidebar({ bots }: { bots: BotSummary[] }) {
               <Link key={bot.id} href={`/bot/${bot.id}`}>
                 <div className="px-3 py-1.5 flex items-center justify-between hover:bg-accent/50 transition-colors cursor-pointer">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-muted-foreground w-4">{i + 1}</span>
+                    <span className="text-xs text-muted-foreground w-4">{i + 1}</span>
                     <div className={`h-1.5 w-1.5 ${statusColor} ${bot.status === "ACTIVE" ? "animate-pulse" : ""}`} />
-                    <span className="text-[11px] font-medium">{bot.name}</span>
-                    <span className={`text-[10px] ${riskColors[bot.risk_style] || "text-muted-foreground"}`}>
+                    <span className="text-xs font-medium">{bot.name}</span>
+                    <span className={`text-xs ${riskColors[bot.risk_style] || "text-muted-foreground"}`}>
                       {bot.risk_style}
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px]">${bot.equity_usd.toFixed(2)}</span>
-                    <span className={`text-[10px] ${pnlColor}`}>
+                    <span className="text-xs">${bot.equity_usd.toFixed(2)}</span>
+                    <span className={`text-xs ${pnlColor}`}>
                       {bot.pnl_usd >= 0 ? "+" : ""}{bot.pnl_usd.toFixed(2)}
                     </span>
                   </div>

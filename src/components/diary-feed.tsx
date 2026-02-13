@@ -26,17 +26,17 @@ function DiaryCard({ entry }: { entry: DiaryEntry }) {
       <div className="flex items-center justify-between">
         <Badge
           variant="outline"
-          className={`text-[10px] px-1.5 py-0 ${typeColors[entry.entry_type] || ""}`}
+          className={`text-xs px-1.5 py-0 ${typeColors[entry.entry_type] || ""}`}
         >
           {entry.entry_type}
         </Badge>
-        <span className="text-[10px] text-muted-foreground">{time}</span>
+        <span className="text-xs text-muted-foreground">{time}</span>
       </div>
 
-      <p className="text-xs text-foreground/80 leading-relaxed">{entry.content}</p>
+      <p className="text-sm text-foreground/80 leading-relaxed">{entry.content}</p>
 
       {meta?.reflection && (
-        <p className="text-[11px] text-muted-foreground/60 italic border-l border-border pl-2">
+        <p className="text-xs text-muted-foreground/60 italic border-l border-border pl-2">
           {meta.reflection}
         </p>
       )}
@@ -44,7 +44,7 @@ function DiaryCard({ entry }: { entry: DiaryEntry }) {
       {meta?.lessons && meta.lessons.length > 0 && (
         <div className="space-y-1">
           {meta.lessons.map((lesson, i) => (
-            <p key={i} className="text-[10px] text-muted-foreground/50 pl-2 border-l border-yellow-400/20">
+            <p key={i} className="text-xs text-muted-foreground/50 pl-2 border-l border-yellow-400/20">
               {lesson}
             </p>
           ))}
@@ -52,7 +52,7 @@ function DiaryCard({ entry }: { entry: DiaryEntry }) {
       )}
 
       {meta?.equity_at_reflection != null && (
-        <span className="text-[10px] text-muted-foreground/40">
+        <span className="text-xs text-muted-foreground/40">
           Equity: ${meta.equity_at_reflection.toFixed(2)}
         </span>
       )}
@@ -65,8 +65,8 @@ export function DiaryFeed({ entries }: { entries: DiaryEntry[] }) {
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest">Diary</CardTitle>
-          <span className="text-[10px] text-muted-foreground">
+          <CardTitle className="text-sm uppercase tracking-widest">Diary</CardTitle>
+          <span className="text-xs text-muted-foreground">
             {entries.length} entries
           </span>
         </div>
@@ -75,7 +75,7 @@ export function DiaryFeed({ entries }: { entries: DiaryEntry[] }) {
         <ScrollArea className="h-full">
           <div className="p-4 space-y-2">
             {entries.length === 0 ? (
-              <p className="text-xs text-muted-foreground italic text-center py-8">
+              <p className="text-sm text-muted-foreground italic text-center py-8">
                 The journal awaits its first entry...
               </p>
             ) : (

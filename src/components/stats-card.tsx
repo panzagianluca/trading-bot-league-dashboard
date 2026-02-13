@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 function Stat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div className="space-y-0.5">
-      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
-      <p className={`text-sm font-medium ${color || ""}`}>{value}</p>
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
+      <p className={`text-base font-medium ${color || ""}`}>{value}</p>
     </div>
   );
 }
@@ -21,7 +21,7 @@ export function StatsCard({ bot }: { bot: BotStatus }) {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2">
-        <CardTitle className="text-xs uppercase tracking-widest">Stats</CardTitle>
+        <CardTitle className="text-sm uppercase tracking-widest">Stats</CardTitle>
       </CardHeader>
       <CardContent className="flex-1">
         <div className="grid grid-cols-2 gap-4">
@@ -40,8 +40,8 @@ export function StatsCard({ bot }: { bot: BotStatus }) {
         </div>
         <div className="mt-4 space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Goal: $500</span>
-            <span className="text-[10px] text-muted-foreground">{progressPct.toFixed(1)}%</span>
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Goal: $500</span>
+            <span className="text-xs text-muted-foreground">{progressPct.toFixed(1)}%</span>
           </div>
           <div className="w-full h-1.5 bg-muted overflow-hidden">
             <div

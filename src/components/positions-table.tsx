@@ -18,14 +18,14 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest">Open Positions</CardTitle>
-          <span className="text-xs text-muted-foreground">{positions.length} active</span>
+          <CardTitle className="text-sm uppercase tracking-widest">Open Positions</CardTitle>
+          <span className="text-sm text-muted-foreground">{positions.length} active</span>
         </div>
       </CardHeader>
       <CardContent className="p-0 flex-1 min-h-0">
         {positions.length === 0 ? (
           <div className="h-full flex items-center justify-center">
-            <p className="text-xs text-muted-foreground italic">
+            <p className="text-sm text-muted-foreground italic">
               Observing the void... no positions yet
             </p>
           </div>
@@ -33,7 +33,7 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
           <ScrollArea className="h-full">
             <Table>
               <TableHeader>
-                <TableRow className="text-[10px] uppercase tracking-widest">
+                <TableRow className="text-xs uppercase tracking-widest">
                   <TableHead className="h-8 px-4">Market</TableHead>
                   <TableHead className="h-8">Side</TableHead>
                   <TableHead className="h-8 text-right">Size</TableHead>
@@ -52,12 +52,12 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
                     ? `${Math.round((Date.now() - new Date(p.opened_at).getTime()) / 60000)}m ago`
                     : "—";
                   return (
-                    <TableRow key={`${p.market_id}-${i}`} className="text-xs">
+                    <TableRow key={`${p.market_id}-${i}`} className="text-sm">
                       <TableCell className="px-4 py-2 font-medium font-mono">{shortMarket}</TableCell>
                       <TableCell className="py-2">
                         <Badge
                           variant={p.side === "BUY" ? "default" : "secondary"}
-                          className="text-[10px] px-1.5 py-0"
+                          className="text-xs px-1.5 py-0"
                         >
                           {p.side}
                         </Badge>

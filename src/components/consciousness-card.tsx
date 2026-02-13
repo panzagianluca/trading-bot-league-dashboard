@@ -26,8 +26,8 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
     <Card className="h-full flex flex-col">
       <CardHeader className="pb-2 shrink-0">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-xs uppercase tracking-widest">Consciousness</CardTitle>
-          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${styleClass}`}>
+          <CardTitle className="text-sm uppercase tracking-widest">Consciousness</CardTitle>
+          <Badge variant="outline" className={`text-xs px-1.5 py-0 ${styleClass}`}>
             {profile.risk_style}
           </Badge>
         </div>
@@ -37,8 +37,8 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
           <div className="px-6 pb-4 space-y-4">
             {/* Strengths / mantra */}
             <div className="space-y-1">
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Mantra</span>
-              <p className="text-[11px] text-foreground/70 leading-relaxed italic line-clamp-4">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">Mantra</span>
+              <p className="text-xs text-foreground/70 leading-relaxed italic line-clamp-4">
                 {profile.strengths}
               </p>
             </div>
@@ -46,28 +46,28 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
             {/* Config */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-0.5">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Min Confidence</span>
-                <p className="text-sm font-medium">{(profile.min_confidence * 100).toFixed(0)}%</p>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Min Confidence</span>
+                <p className="text-base font-medium">{(profile.min_confidence * 100).toFixed(0)}%</p>
               </div>
               <div className="space-y-0.5">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Max Position</span>
-                <p className="text-sm font-medium">{profile.max_position_pct}%</p>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Max Position</span>
+                <p className="text-base font-medium">{profile.max_position_pct}%</p>
               </div>
               <div className="space-y-0.5">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Markets</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Markets</span>
                 <div className="flex gap-1">
                   {(profile.preferred_markets || []).map((m) => (
-                    <Badge key={m} variant="outline" className="text-[10px] px-1.5 py-0">
+                    <Badge key={m} variant="outline" className="text-xs px-1.5 py-0">
                       {m}
                     </Badge>
                   ))}
                 </div>
               </div>
               <div className="space-y-0.5">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Horizons</span>
+                <span className="text-xs uppercase tracking-widest text-muted-foreground">Horizons</span>
                 <div className="flex gap-1">
                   {(profile.preferred_horizons || []).map((h) => (
-                    <Badge key={h} variant="outline" className="text-[10px] px-1.5 py-0">
+                    <Badge key={h} variant="outline" className="text-xs px-1.5 py-0">
                       {h}m
                     </Badge>
                   ))}
@@ -77,10 +77,10 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
 
             {/* Playbook weights */}
             <div className="space-y-2">
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Strategy Weights</span>
+              <span className="text-xs uppercase tracking-widest text-muted-foreground">Strategy Weights</span>
               {Object.entries(weights).map(([name, weight]) => (
                 <div key={name} className="space-y-0.5">
-                  <div className="flex justify-between text-[10px]">
+                  <div className="flex justify-between text-xs">
                     <span className="text-muted-foreground">{name}</span>
                     <span>{(weight * 100).toFixed(0)}%</span>
                   </div>
@@ -92,8 +92,8 @@ export function ConsciousnessCard({ profile }: { profile: SelfProfile }) {
             {/* Weaknesses */}
             {profile.weaknesses && (
               <div className="space-y-1">
-                <span className="text-[10px] uppercase tracking-widest text-red-400/70">Weaknesses</span>
-                <p className="text-[11px] text-foreground/70">{profile.weaknesses}</p>
+                <span className="text-xs uppercase tracking-widest text-red-400/70">Weaknesses</span>
+                <p className="text-xs text-foreground/70">{profile.weaknesses}</p>
               </div>
             )}
           </div>

@@ -19,7 +19,7 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
   if (loading) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-xs text-muted-foreground animate-pulse">Connecting to consciousness...</p>
+        <p className="text-sm text-muted-foreground animate-pulse">Connecting to consciousness...</p>
       </div>
     );
   }
@@ -27,7 +27,7 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
   if (error || !botStatus) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-xs text-red-400">{error || "Failed to reach the bot"}</p>
+        <p className="text-sm text-red-400">{error || "Failed to reach the bot"}</p>
       </div>
     );
   }
@@ -65,7 +65,7 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
               <ConsciousnessCard profile={selfProfile} />
             ) : (
               <div className="h-full border border-border flex items-center justify-center">
-                <p className="text-xs text-muted-foreground italic">Identity forming...</p>
+                <p className="text-sm text-muted-foreground italic">Identity forming...</p>
               </div>
             )}
           </div>

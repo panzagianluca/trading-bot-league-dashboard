@@ -7,8 +7,8 @@ import { BotStatus } from "@/lib/api";
 function NavStat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div className="flex items-center gap-1.5">
-      <span className="text-[10px] uppercase tracking-widest text-muted-foreground">{label}</span>
-      <span className={`text-xs font-medium ${color || ""}`}>{value}</span>
+      <span className="text-xs uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className={`text-sm font-medium ${color || ""}`}>{value}</span>
     </div>
   );
 }
@@ -44,11 +44,11 @@ export function BotNavbar({ bot, lastUpdated }: { bot: BotStatus; lastUpdated: D
       <div className="flex items-center gap-4">
         <Link
           href="/"
-          className="text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+          className="text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
         >
           &larr; BACK
         </Link>
-        <span className="text-[10px] text-muted-foreground">
+        <span className="text-xs text-muted-foreground">
           {dayStr} {timeStr}
         </span>
       </div>
@@ -56,8 +56,8 @@ export function BotNavbar({ bot, lastUpdated }: { bot: BotStatus; lastUpdated: D
       {/* Center: Bot name + status */}
       <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-2">
         <div className={`h-1.5 w-1.5 ${bot.status === "ACTIVE" ? "bg-green-400 animate-pulse" : "bg-red-400"}`} />
-        <span className="text-xs font-medium">{bot.name}</span>
-        <span className={`text-[10px] uppercase ${statusColor}`}>{bot.status}</span>
+        <span className="text-sm font-medium">{bot.name}</span>
+        <span className={`text-xs uppercase ${statusColor}`}>{bot.status}</span>
       </div>
 
       {/* Right: Stats */}
@@ -75,7 +75,7 @@ export function BotNavbar({ bot, lastUpdated }: { bot: BotStatus; lastUpdated: D
           color={bot.unrealized_pnl_usd >= 0 ? "text-green-400" : "text-red-400"}
         />
         <div className="flex flex-col gap-0.5 items-end">
-          <span className="text-[10px] text-muted-foreground">$500</span>
+          <span className="text-xs text-muted-foreground">$500</span>
           <div className="w-20 h-1 bg-muted overflow-hidden">
             <div
               className="h-full bg-foreground/50 transition-all duration-500"

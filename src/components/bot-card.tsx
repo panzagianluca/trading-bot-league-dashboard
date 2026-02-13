@@ -35,9 +35,9 @@ export function BotCard({ bot }: { bot: BotSummary }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className={`h-1.5 w-1.5 ${statusColor} ${bot.status === "ACTIVE" ? "animate-pulse" : ""}`} />
-            <span className="text-xs font-medium">{bot.name}</span>
+            <span className="text-sm font-medium">{bot.name}</span>
           </div>
-          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${riskColors[bot.risk_style] || ""}`}>
+          <Badge variant="outline" className={`text-xs px-1.5 py-0 ${riskColors[bot.risk_style] || ""}`}>
             {bot.risk_style}
           </Badge>
         </div>
@@ -45,22 +45,22 @@ export function BotCard({ bot }: { bot: BotSummary }) {
         {/* Stats row */}
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           <div className="flex justify-between">
-            <span className="text-[10px] text-muted-foreground">Equity</span>
-            <span className="text-[10px] font-medium">${bot.equity_usd.toFixed(2)}</span>
+            <span className="text-xs text-muted-foreground">Equity</span>
+            <span className="text-xs font-medium">${bot.equity_usd.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[10px] text-muted-foreground">PnL</span>
-            <span className={`text-[10px] font-medium ${pnlColor}`}>
+            <span className="text-xs text-muted-foreground">PnL</span>
+            <span className={`text-xs font-medium ${pnlColor}`}>
               {bot.pnl_usd >= 0 ? "+" : ""}{bot.pnl_usd.toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[10px] text-muted-foreground">Cash</span>
-            <span className="text-[10px] font-medium">${bot.cash_usd.toFixed(2)}</span>
+            <span className="text-xs text-muted-foreground">Cash</span>
+            <span className="text-xs font-medium">${bot.cash_usd.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-[10px] text-muted-foreground">Last</span>
-            <span className={`text-[10px] font-medium ${actionColors[bot.last_action] || ""}`}>
+            <span className="text-xs text-muted-foreground">Last</span>
+            <span className={`text-xs font-medium ${actionColors[bot.last_action] || ""}`}>
               {bot.last_action}
             </span>
           </div>
