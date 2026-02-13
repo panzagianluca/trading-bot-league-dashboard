@@ -38,29 +38,29 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
     <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
       <BotNavbar bot={botStatus} lastUpdated={lastUpdated} />
 
-      <div className="flex-1 min-h-0 p-4 flex flex-col gap-3">
-        {/* Row 1: PnL Chart (40%) | Positions (40%) | Stats card (20%) */}
-        <div className="flex gap-3 h-[45%] min-h-0">
-          <div className="w-[40%] shrink-0">
+      <div className="flex-1 min-h-0 p-4 flex flex-col gap-3 overflow-hidden">
+        {/* Row 1: PnL Chart | Positions | Stats card */}
+        <div className="flex gap-3 h-[45%] min-h-0 overflow-hidden">
+          <div className="min-w-0" style={{ flex: "4 1 0%" }}>
             <PnlChart data={equityHistory} />
           </div>
-          <div className="w-[40%] shrink-0">
+          <div className="min-w-0" style={{ flex: "4 1 0%" }}>
             <PositionsTable positions={portfolio?.positions || []} />
           </div>
-          <div className="w-[20%] shrink-0">
+          <div className="min-w-0" style={{ flex: "2 1 0%" }}>
             <StatsCard bot={botStatus} />
           </div>
         </div>
 
-        {/* Row 2: Live Thinking (40%) | Diary (40%) | Consciousness (20%) */}
-        <div className="flex gap-3 flex-1 min-h-0">
-          <div className="w-[40%] shrink-0 min-h-0">
+        {/* Row 2: Live Thinking | Diary | Consciousness */}
+        <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
+          <div className="min-w-0 min-h-0" style={{ flex: "4 1 0%" }}>
             <DecisionsFeed decisions={decisions} />
           </div>
-          <div className="w-[40%] shrink-0 min-h-0">
+          <div className="min-w-0 min-h-0" style={{ flex: "4 1 0%" }}>
             <DiaryFeed entries={diary} />
           </div>
-          <div className="w-[20%] shrink-0 min-h-0">
+          <div className="min-w-0 min-h-0" style={{ flex: "2 1 0%" }}>
             {selfProfile ? (
               <ConsciousnessCard profile={selfProfile} />
             ) : (
