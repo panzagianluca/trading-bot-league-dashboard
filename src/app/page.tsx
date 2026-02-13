@@ -6,7 +6,7 @@ import { BotSidebar } from "@/components/bot-sidebar";
 import { BotCard } from "@/components/bot-card";
 
 export default function HomePage() {
-  const { bots, stats, error, loading } = useLeagueData();
+  const { bots, stats, error, loading, refetch } = useLeagueData();
   const active = bots.filter((b) => b.status === "ACTIVE");
   const sorted = [...active].sort((a, b) => b.equity_usd - a.equity_usd);
   const killLine = sorted.length - 4;
@@ -30,7 +30,7 @@ export default function HomePage() {
 
   return (
     <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
-      <LeagueNavbar stats={stats} />
+      <LeagueNavbar stats={stats} onRefresh={refetch} />
 
       <div className="flex-1 flex min-h-0">
         {/* Left sidebar: 20% bot list */}
