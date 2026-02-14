@@ -7,17 +7,12 @@ import { BotCard } from "@/components/bot-card";
 
 export default function HomePage() {
   const { bots, stats, error, loading, refetch } = useLeagueData();
-  const standard = bots.filter((b) => b.status === "ACTIVE" && b.bot_type !== "STREAK_HUNTER");
-  const streak = bots.filter((b) => b.bot_type === "STREAK_HUNTER");
-  const killed = bots.filter((b) => b.status === "KILLED");
-  const sorted = [...standard].sort((a, b) => b.equity_usd - a.equity_usd);
-  const killLine = sorted.length - 4;
-  const dangerIds = new Set(sorted.slice(killLine).map((b) => b.id));
+  const sorted = [...bots].sort((a, b) => b.equity_usd - a.equity_usd);
 
   if (loading) {
     return (
       <div className="h-screen bg-background text-foreground flex items-center justify-center">
-        <p className="text-sm text-muted-foreground animate-pulse">Loading league...</p>
+        <p className="text-sm text-muted-foreground animate-pulse">Loading bots...</p>
       </div>
     );
   }
@@ -35,56 +30,19 @@ export default function HomePage() {
       <LeagueNavbar stats={stats} onRefresh={refetch} />
 
       <div className="flex-1 flex min-h-0">
-        {/* Left sidebar: 20% bot list */}
+        {/* Left sidebar: bot list */}
         <div className="w-[20%] shrink-0">
           <BotSidebar bots={bots} />
         </div>
 
-        {/* Right: 80% bot grid */}
+        {/* Right: bot grid */}
         <div className="flex-1 p-4 overflow-auto">
           <div className="grid grid-cols-3 gap-3">
             {sorted.map((bot) => (
-              <BotCard key={bot.id} bot={bot} inDanger={dangerIds.has(bot.id)} />
+              <BotCard key={bot.id} bot={bot} />
             ))}
           </div>
-
-          {/* Streak Hunter bots */}
-          {streak.length > 0 && (
-            <>
-              <div className="flex items-center gap-3 my-4">
-                <div className="flex-1 border-t border-amber-400/40" />
-                <span className="text-xs uppercase tracking-widest text-amber-400/70">
-                  &#x1F525; Streak Hunter ({streak.length})
-                </span>
-                <div className="flex-1 border-t border-amber-400/40" />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {streak.map((bot) => (
-                  <BotCard key={bot.id} bot={bot} />
-                ))}
-              </div>
-            </>
-          )}
-
-          {/* Killed bots */}
-          {killed.length > 0 && (
-            <>
-              <div className="flex items-center gap-3 my-4">
-                <div className="flex-1 border-t border-muted-foreground/20" />
-                <span className="text-xs uppercase tracking-widest text-muted-foreground/50">
-                  &#x2620; Killed ({killed.length})
-                </span>
-                <div className="flex-1 border-t border-muted-foreground/20" />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {killed.map((bot) => (
-                  <BotCard key={bot.id} bot={bot} isKilled />
-                ))}
-              </div>
-            </>
-          )}
-
-          {sorted.length === 0 && killed.length === 0 && (
+          {sorted.length === 0 && (
             <p className="text-sm text-muted-foreground italic text-center py-16">
               No bots found...
             </p>

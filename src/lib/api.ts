@@ -49,10 +49,47 @@ export interface Portfolio {
 export interface Position {
   market_id: string;
   side: "BUY" | "SELL";
+  direction: "UP" | "DOWN";
+  asset: "BTC" | "ETH" | "SOL" | "XRP";
+  horizon_minutes: number;
   size_usd: number;
   avg_entry_price: number;
   unrealized_pnl_usd: number;
   opened_at: string;
+}
+
+export interface TradeHistoryItem {
+  type: "ORDER" | "POSITION";
+  id: number;
+  market_id: string;
+  action: "BUY" | "SELL" | "CLAIMED" | "HOLDING";
+  direction: "UP" | "DOWN";
+  asset: "BTC" | "ETH" | "SOL" | "XRP";
+  horizon_minutes: number;
+  size_usd: number;
+  price: number;
+  outcome: "WON" | "LOST" | "OPEN" | "REJECTED" | "SOLD_EARLY";
+  realized_pnl_usd: number | null;
+  timestamp: string;
+}
+
+export interface TradeHistorySummary {
+  total_orders: number;
+  total_buys: number;
+  total_sells: number;
+  total_claimed: number;
+  total_won: number;
+  total_lost: number;
+  open_positions: number;
+  direction_up: number;
+  direction_down: number;
+  win_rate: number;
+}
+
+export interface TradeHistory {
+  bot_id: number;
+  summary: TradeHistorySummary;
+  history: TradeHistoryItem[];
 }
 
 export interface Decision {
@@ -191,6 +228,12 @@ export async function fetchDiary(botId = 1, limit = 10): Promise<DiaryEntry[]> {
 export async function fetchAllBots(): Promise<BotSummary[]> {
   const res = await fetch(bust(`${API_BASE}/api/bots?include_killed=true&include_special=true`), NO_CACHE);
   if (!res.ok) throw new Error(`Bots list: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchTradeHistory(botId = 1, limit = 50): Promise<TradeHistory> {
+  const res = await fetch(bust(`${API_BASE}/api/bots/${botId}/trade-history?limit=${limit}`), NO_CACHE);
+  if (!res.ok) throw new Error(`Trade history: ${res.status}`);
   return res.json();
 }
 

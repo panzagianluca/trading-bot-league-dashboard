@@ -13,6 +13,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
+const directionStyle = {
+  UP: "text-green-400 bg-green-400/10 border-green-400/30",
+  DOWN: "text-red-400 bg-red-400/10 border-red-400/30",
+};
+
 export function PositionsTable({ positions }: { positions: Position[] }) {
   return (
     <Card className="h-full flex flex-col">
@@ -26,7 +31,7 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
         {positions.length === 0 ? (
           <div className="h-full flex items-center justify-center">
             <p className="text-sm text-muted-foreground italic">
-              Observing the void... no positions yet
+              No positions open
             </p>
           </div>
         ) : (
@@ -34,8 +39,8 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
             <Table>
               <TableHeader>
                 <TableRow className="text-xs uppercase tracking-widest">
-                  <TableHead className="h-8 px-4">Market</TableHead>
-                  <TableHead className="h-8">Side</TableHead>
+                  <TableHead className="h-8 px-4">Asset</TableHead>
+                  <TableHead className="h-8">Dir</TableHead>
                   <TableHead className="h-8 text-right">Size</TableHead>
                   <TableHead className="h-8 text-right">Entry</TableHead>
                   <TableHead className="h-8 text-right">PnL</TableHead>
@@ -45,21 +50,18 @@ export function PositionsTable({ positions }: { positions: Position[] }) {
               <TableBody>
                 {positions.map((p, i) => {
                   const pnlColor = p.unrealized_pnl_usd >= 0 ? "text-green-400" : "text-red-400";
-                  const shortMarket = p.market_id.length > 10
-                    ? `${p.market_id.slice(0, 6)}...${p.market_id.slice(-4)}`
-                    : p.market_id;
                   const openedAgo = p.opened_at
                     ? `${Math.round((Date.now() - new Date(p.opened_at).getTime()) / 60000)}m ago`
-                    : "—";
+                    : "\u2014";
+                  const dir = p.direction || "UP";
+                  const asset = p.asset || "?";
+                  const horizon = p.horizon_minutes || "?";
                   return (
                     <TableRow key={`${p.market_id}-${i}`} className="text-sm">
-                      <TableCell className="px-4 py-2 font-medium font-mono">{shortMarket}</TableCell>
+                      <TableCell className="px-4 py-2 font-medium">{asset} {horizon}m</TableCell>
                       <TableCell className="py-2">
-                        <Badge
-                          variant={p.side === "BUY" ? "default" : "secondary"}
-                          className="text-xs px-1.5 py-0"
-                        >
-                          {p.side}
+                        <Badge variant="outline" className={`text-xs px-1.5 py-0 ${directionStyle[dir] || ""}`}>
+                          {dir === "UP" ? "\u2191" : "\u2193"} {dir}
                         </Badge>
                       </TableCell>
                       <TableCell className="py-2 text-right">${p.size_usd.toFixed(2)}</TableCell>

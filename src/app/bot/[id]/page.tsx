@@ -10,11 +10,12 @@ import { StatsCard } from "@/components/stats-card";
 import { DecisionsFeed } from "@/components/decisions-feed";
 import { DiaryFeed } from "@/components/diary-feed";
 import { ConsciousnessCard } from "@/components/consciousness-card";
+import { TradeHistoryTable } from "@/components/trade-history-table";
 
 export default function BotPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const botId = parseInt(id, 10);
-  const { botStatus, portfolio, decisions, diary, equityHistory, lastUpdated, error, loading } = useBotData(botId);
+  const { botStatus, portfolio, decisions, diary, equityHistory, tradeHistory, lastUpdated, error, loading } = useBotData(botId);
 
   if (loading) {
     return (
@@ -40,7 +41,7 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
 
       <div className="flex-1 min-h-0 p-4 flex flex-col gap-3 overflow-hidden">
         {/* Row 1: PnL Chart | Positions | Stats card */}
-        <div className="flex gap-3 h-[45%] min-h-0 overflow-hidden">
+        <div className="flex gap-3 h-[35%] min-h-0 overflow-hidden">
           <div className="min-w-0" style={{ flex: "4 1 0%" }}>
             <PnlChart data={equityHistory} />
           </div>
@@ -52,7 +53,14 @@ export default function BotPage({ params }: { params: Promise<{ id: string }> })
           </div>
         </div>
 
-        {/* Row 2: Live Thinking | Diary | Consciousness */}
+        {/* Row 2: Trade History */}
+        <div className="flex gap-3 h-[30%] min-h-0 overflow-hidden">
+          <div className="min-w-0 w-full">
+            <TradeHistoryTable tradeHistory={tradeHistory} />
+          </div>
+        </div>
+
+        {/* Row 3: Live Thinking | Diary | Consciousness */}
         <div className="flex gap-3 flex-1 min-h-0 overflow-hidden">
           <div className="min-w-0 min-h-0" style={{ flex: "4 1 0%" }}>
             <DecisionsFeed decisions={decisions} />
