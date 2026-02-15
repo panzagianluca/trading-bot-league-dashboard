@@ -1,4 +1,5 @@
-const API_BASE = "https://d0kusks0flg5.share.zrok.io";
+// Proxied through Next.js rewrites to avoid CORS
+const API_BASE = "/api/bot";
 
 // ── Types ──────────────────────────────────────────────────────
 
