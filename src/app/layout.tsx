@@ -9,8 +9,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Trading Bot League",
-  description: "Autonomous trading bot elimination league dashboard",
+  title: "Polybot Dashboard",
+  description: "$100 → $1,000 crypto prediction market challenge",
 };
 
 export default function RootLayout({
