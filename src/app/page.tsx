@@ -39,26 +39,23 @@ function Navbar({
 }) {
   const now = useClock();
   const timeStr = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  const dayStr = now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
 
   return (
-    <div className="border-b border-border h-12 px-4 flex items-center justify-between shrink-0">
-      <div className="flex items-center gap-4">
-        <span className="text-sm font-medium uppercase tracking-widest">Polybot</span>
-        <span className="text-xs text-muted-foreground">{dayStr} {timeStr}</span>
+    <div className="border-b border-border h-12 px-3 sm:px-4 flex items-center justify-between shrink-0">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <span className="text-xs sm:text-sm font-medium uppercase tracking-widest">Polybot</span>
+        <span className="text-xs text-muted-foreground hidden sm:inline">
+          {now.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" })}
+        </span>
+        <span className="text-xs text-muted-foreground">{timeStr}</span>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <div className="flex items-center gap-1.5">
           <span className={`inline-block w-2 h-2 rounded-full ${connected ? "bg-green-400 animate-pulse" : "bg-red-400"}`} />
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground hidden sm:inline">
             {connected ? "LIVE" : "RECONNECTING..."}
           </span>
         </div>
-        {lastUpdated && (
-          <span className="text-xs text-muted-foreground">
-            {lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
-          </span>
-        )}
         <button
           onClick={onRefresh}
           className="px-2 py-1 border border-border text-xs uppercase tracking-widest hover:bg-accent/50 transition-colors cursor-pointer"
@@ -79,7 +76,6 @@ function ChallengeProgress({ status }: { status: BotStatus }) {
   const progress = Math.max(0, Math.min(((current - start) / (target - start)) * 100, 100));
   const profitColor = status.challenge_profit >= 0 ? "text-green-400" : "text-red-400";
 
-  // Gradient from red (start) through yellow to green (target)
   const gradientColor = progress < 30
     ? "from-red-500 to-red-400"
     : progress < 60
@@ -87,22 +83,22 @@ function ChallengeProgress({ status }: { status: BotStatus }) {
       : "from-yellow-400 to-green-400";
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm uppercase tracking-widest">$100 → $1,000 Challenge</CardTitle>
+          <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">$100 → $1,000</CardTitle>
           <span className="text-xs text-muted-foreground">{(status.challenge_progress * 100).toFixed(1)}%</span>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center gap-3">
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6 space-y-3">
         <div className="flex items-end justify-between">
           <div>
             <span className="text-xs text-muted-foreground uppercase tracking-widest">Equity</span>
-            <p className="text-2xl font-medium">${current.toFixed(2)}</p>
+            <p className="text-xl sm:text-2xl font-medium">${current.toFixed(2)}</p>
           </div>
           <div className="text-right">
             <span className="text-xs text-muted-foreground uppercase tracking-widest">Profit</span>
-            <p className={`text-lg font-medium ${profitColor}`}>
+            <p className={`text-base sm:text-lg font-medium ${profitColor}`}>
               {status.challenge_profit >= 0 ? "+" : ""}${status.challenge_profit.toFixed(2)}
             </p>
           </div>
@@ -137,16 +133,16 @@ function PriceTickers({ status }: { status: BotStatus }) {
   ];
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm uppercase tracking-widest">Live Prices</CardTitle>
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
+        <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Live Prices</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-2 gap-4">
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+        <div className="grid grid-cols-4 sm:grid-cols-2 gap-2 sm:gap-4">
           {tickers.map((t) => (
             <div key={t.symbol} className="space-y-0.5">
               <span className="text-xs uppercase tracking-widest text-muted-foreground">{t.symbol}</span>
-              <p className="text-base font-medium font-mono">
+              <p className="text-xs sm:text-base font-medium font-mono">
                 ${t.price < 10 ? t.price.toFixed(4) : t.price.toLocaleString(undefined, { maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -161,34 +157,33 @@ function PriceTickers({ status }: { status: BotStatus }) {
 
 function BalanceCard({ status }: { status: BotStatus }) {
   const pnlColor = status.pnl >= 0 ? "text-green-400" : "text-red-400";
-
   const volLabel = status.volatility_score < 1 ? "LOW" : status.volatility_score < 2 ? "MODERATE" : "HIGH";
   const volColor = status.volatility_score < 1 ? "text-green-400" : status.volatility_score < 2 ? "text-yellow-400" : "text-red-400";
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm uppercase tracking-widest">Balance</CardTitle>
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
+        <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Balance</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-2 gap-4">
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <div className="space-y-0.5">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Available</span>
-            <p className="text-base font-medium">${status.balance.toFixed(2)}</p>
+            <p className="text-sm sm:text-base font-medium">${status.balance.toFixed(2)}</p>
           </div>
           <div className="space-y-0.5">
-            <span className="text-xs uppercase tracking-widest text-muted-foreground">In Positions</span>
-            <p className="text-base font-medium">${status.positions_value.toFixed(2)}</p>
+            <span className="text-xs uppercase tracking-widest text-muted-foreground">Positions</span>
+            <p className="text-sm sm:text-base font-medium">${status.positions_value.toFixed(2)}</p>
           </div>
           <div className="space-y-0.5">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Total PnL</span>
-            <p className={`text-base font-medium ${pnlColor}`}>
+            <p className={`text-sm sm:text-base font-medium ${pnlColor}`}>
               {status.pnl >= 0 ? "+" : ""}${status.pnl.toFixed(2)}
             </p>
           </div>
           <div className="space-y-0.5">
             <span className="text-xs uppercase tracking-widest text-muted-foreground">Volatility</span>
-            <p className={`text-base font-medium ${volColor}`}>{volLabel} ({status.volatility_score.toFixed(1)})</p>
+            <p className={`text-sm sm:text-base font-medium ${volColor}`}>{volLabel}</p>
           </div>
         </div>
       </CardContent>
@@ -200,22 +195,28 @@ function BalanceCard({ status }: { status: BotStatus }) {
 
 function RiskModeCard({ status }: { status: BotStatus }) {
   const config = RISK_CONFIG[status.risk_mode] || RISK_CONFIG.MODERATE;
-
   const modes: RiskMode[] = ["ULTRA_CONSERVATIVE", "CONSERVATIVE", "MODERATE", "AGGRESSIVE", "HOUSE_MONEY"];
   const activeIdx = modes.indexOf(status.risk_mode);
 
+  const descriptions: Record<RiskMode, string> = {
+    ULTRA_CONSERVATIVE: "Down $10+. Preservation mode.",
+    CONSERVATIVE: "Below $100. Careful entries.",
+    MODERATE: "$100-$150. Balanced approach.",
+    AGGRESSIVE: "$150-$250. Larger positions.",
+    HOUSE_MONEY: "$250+. Max opportunity.",
+  };
+
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm uppercase tracking-widest">Risk Mode</CardTitle>
+          <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Risk Mode</CardTitle>
           <Badge variant="outline" className={`text-xs px-2 py-0.5 ${config.color} ${config.bg} border-current`}>
             {config.label}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-center gap-2">
-        {/* Visual scale */}
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6 space-y-2">
         <div className="flex gap-1">
           {modes.map((m, i) => {
             const c = RISK_CONFIG[m];
@@ -235,13 +236,7 @@ function RiskModeCard({ status }: { status: BotStatus }) {
           <span>SAFE</span>
           <span>AGGRESSIVE</span>
         </div>
-        <p className="text-xs text-muted-foreground mt-1">
-          {status.risk_mode === "ULTRA_CONSERVATIVE" && "Down $10+. Minimal position sizes, preservation mode."}
-          {status.risk_mode === "CONSERVATIVE" && "Below $100. Small positions, careful entries only."}
-          {status.risk_mode === "MODERATE" && "$100-$150. Standard sizing, balanced approach."}
-          {status.risk_mode === "AGGRESSIVE" && "$150-$250. Larger positions, more conviction trades."}
-          {status.risk_mode === "HOUSE_MONEY" && "$250+. Playing with profits, maximum opportunity seeking."}
-        </p>
+        <p className="text-xs text-muted-foreground">{descriptions[status.risk_mode]}</p>
       </CardContent>
     </Card>
   );
@@ -257,19 +252,17 @@ function LastDecisionCard({ status }: { status: BotStatus }) {
         : "text-muted-foreground bg-muted border-border";
 
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm uppercase tracking-widest">Last Decision</CardTitle>
+          <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Last Decision</CardTitle>
           <Badge variant="outline" className={`text-xs px-2 py-0.5 ${actionColor}`}>
             {d.action}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent className="flex-1 min-h-0">
-        <ScrollArea className="h-full">
-          <p className="text-sm text-foreground/80 leading-relaxed">{d.reasoning}</p>
-        </ScrollArea>
+      <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+        <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed">{d.reasoning}</p>
       </CardContent>
     </Card>
   );
@@ -294,31 +287,31 @@ const LOG_COLORS = {
 
 function LogFeed({ logs, totalLines }: { logs: string[]; totalLines: number }) {
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2 shrink-0">
+    <Card>
+      <CardHeader className="pb-2 px-3 sm:px-6">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm uppercase tracking-widest">Live Logs</CardTitle>
+          <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Live Logs</CardTitle>
           <span className="text-xs text-muted-foreground">{totalLines.toLocaleString()} total</span>
         </div>
       </CardHeader>
-      <CardContent className="p-0 flex-1 min-h-0">
+      <CardContent className="p-0">
         {logs.length === 0 ? (
-          <div className="h-full flex items-center justify-center">
+          <div className="py-8 flex items-center justify-center">
             <p className="text-sm text-muted-foreground italic">Waiting for logs...</p>
           </div>
         ) : (
-          <ScrollArea className="h-full">
-            <div className="px-4 py-2 space-y-0.5 font-mono">
+          <div className="max-h-[40vh] sm:max-h-[50vh] overflow-y-auto">
+            <div className="px-3 sm:px-4 py-2 space-y-0.5 font-mono">
               {logs.map((line, i) => {
                 const level = parseLogLevel(line);
                 return (
-                  <p key={i} className={`text-xs leading-relaxed break-all ${LOG_COLORS[level]}`}>
+                  <p key={i} className={`text-[10px] sm:text-xs leading-relaxed break-all ${LOG_COLORS[level]}`}>
                     {line}
                   </p>
                 );
               })}
             </div>
-          </ScrollArea>
+          </div>
         )}
       </CardContent>
     </Card>
@@ -350,37 +343,26 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="h-screen bg-background text-foreground flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar connected={connected} lastUpdated={lastUpdated} onRefresh={refetch} />
 
-      <div className="flex-1 min-h-0 p-4 flex flex-col gap-3 overflow-hidden">
-        {/* Row 1: Challenge Progress | Price Tickers | Balance */}
-        <div className="flex gap-3 h-[30%] min-h-0">
-          <div className="min-w-0" style={{ flex: "4 1 0%" }}>
-            <ChallengeProgress status={status} />
-          </div>
-          <div className="min-w-0" style={{ flex: "3 1 0%" }}>
-            <PriceTickers status={status} />
-          </div>
-          <div className="min-w-0" style={{ flex: "3 1 0%" }}>
-            <BalanceCard status={status} />
-          </div>
+      <div className="flex-1 p-3 sm:p-4 space-y-3">
+        {/* Row 1: Challenge (full on mobile) | Prices + Balance side by side */}
+        <ChallengeProgress status={status} />
+
+        <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
+          <PriceTickers status={status} />
+          <BalanceCard status={status} />
         </div>
 
-        {/* Row 2: Risk Mode | Last Decision */}
-        <div className="flex gap-3 h-[25%] min-h-0">
-          <div className="min-w-0" style={{ flex: "4 1 0%" }}>
-            <RiskModeCard status={status} />
-          </div>
-          <div className="min-w-0" style={{ flex: "6 1 0%" }}>
-            <LastDecisionCard status={status} />
-          </div>
+        {/* Row 2: Risk Mode + Last Decision */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <RiskModeCard status={status} />
+          <LastDecisionCard status={status} />
         </div>
 
         {/* Row 3: Live Logs */}
-        <div className="flex-1 min-h-0">
-          <LogFeed logs={logs} totalLines={totalLogLines} />
-        </div>
+        <LogFeed logs={logs} totalLines={totalLogLines} />
       </div>
     </div>
   );
