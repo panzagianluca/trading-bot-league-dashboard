@@ -301,16 +301,16 @@ function SignalRow({ s }: { s: Signal }) {
   );
 }
 
-function SignalPanel({ signals }: { signals: SignalsResponse }) {
+function SignalPanel({ signals }: { signals: SignalsResponse | null }) {
   return (
     <Card>
       <CardHeader className="pb-0 px-3 sm:px-6 pt-3 sm:pt-6">
         <div className="flex items-center justify-between">
           <CardTitle className="text-xs sm:text-sm uppercase tracking-widest">Bayesian vs LLM</CardTitle>
-          <span className="text-xs text-muted-foreground">{signals.executed_count} executed</span>
+          <span className="text-xs text-muted-foreground">{signals ? `${signals.executed_count} executed` : "..."}</span>
         </div>
       </CardHeader>
-      <SignalStats signals={signals} />
+      {signals && <SignalStats signals={signals} />}
       <CardContent className="p-0">
         {/* Header */}
         <div className="grid grid-cols-4 sm:grid-cols-8 gap-1 sm:gap-2 px-3 sm:px-4 py-1 text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest border-b border-border">
@@ -324,8 +324,10 @@ function SignalPanel({ signals }: { signals: SignalsResponse }) {
           <span>Result</span>
         </div>
         <div className="max-h-[30vh] sm:max-h-[35vh] overflow-y-auto">
-          {signals.signals.length === 0 ? (
-            <p className="text-xs text-muted-foreground italic text-center py-6">No signals yet...</p>
+          {!signals || signals.signals.length === 0 ? (
+            <p className="text-xs text-muted-foreground italic text-center py-6">
+              {signals ? "No signals yet..." : "Waiting for signal data..."}
+            </p>
           ) : (
             signals.signals.map((s, i) => <SignalRow key={`${s.market_id}-${i}`} s={s} />)
           )}
@@ -337,8 +339,8 @@ function SignalPanel({ signals }: { signals: SignalsResponse }) {
 
 // ── Pending Trades ───────────────────────────────────────────
 
-function PendingTradesCard({ botState }: { botState: BotState }) {
-  const trades = [...(botState.pending_trades || []), ...(botState.positions || [])];
+function PendingTradesCard({ botState }: { botState: BotState | null }) {
+  const trades = botState ? [...(botState.pending_trades || []), ...(botState.positions || [])] : [];
 
   return (
     <Card>
@@ -350,7 +352,9 @@ function PendingTradesCard({ botState }: { botState: BotState }) {
       </CardHeader>
       <CardContent className="p-0">
         {trades.length === 0 ? (
-          <p className="text-xs text-muted-foreground italic text-center py-4">No open positions</p>
+          <p className="text-xs text-muted-foreground italic text-center py-4">
+            {botState ? "No open positions" : "Waiting for position data..."}
+          </p>
         ) : (
           <div className="max-h-[25vh] overflow-y-auto">
             {trades.map((t, i) => (
@@ -375,8 +379,8 @@ function PendingTradesCard({ botState }: { botState: BotState }) {
 
 // ── Trade History ────────────────────────────────────────────
 
-function TradeHistoryCard({ botState }: { botState: BotState }) {
-  const trades = botState.trade_history || [];
+function TradeHistoryCard({ botState }: { botState: BotState | null }) {
+  const trades = botState?.trade_history || [];
   const wins = trades.filter(t => t.result === "WIN").length;
   const losses = trades.filter(t => t.result === "LOSS").length;
   const totalPnl = trades.reduce((sum, t) => sum + (t.pnl || 0), 0);
@@ -397,7 +401,9 @@ function TradeHistoryCard({ botState }: { botState: BotState }) {
       </CardHeader>
       <CardContent className="p-0">
         {trades.length === 0 ? (
-          <p className="text-xs text-muted-foreground italic text-center py-4">No trades yet...</p>
+          <p className="text-xs text-muted-foreground italic text-center py-4">
+            {botState ? "No trades yet..." : "Waiting for trade data..."}
+          </p>
         ) : (
           <div className="max-h-[30vh] overflow-y-auto">
             {trades.map((t, i) => {
@@ -518,16 +524,14 @@ export default function Dashboard() {
         {/* Last Decision */}
         <LastDecisionCard status={status} />
 
-        {/* Signal Comparison (only renders when /signals data available) */}
-        {signals && <SignalPanel signals={signals} />}
+        {/* Signal Comparison */}
+        <SignalPanel signals={signals} />
 
-        {/* Open Positions + Trade History (only renders when /state data available) */}
-        {botState && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <PendingTradesCard botState={botState} />
-            <TradeHistoryCard botState={botState} />
-          </div>
-        )}
+        {/* Open Positions + Trade History */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+          <PendingTradesCard botState={botState} />
+          <TradeHistoryCard botState={botState} />
+        </div>
 
         {/* Live Logs */}
         <LogFeed logs={logs} totalLines={totalLogLines} />
