@@ -350,10 +350,8 @@ export default function Dashboard() {
         {/* Row 1: Challenge (full on mobile) | Prices + Balance side by side */}
         <ChallengeProgress status={status} />
 
-        <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
-          <PriceTickers status={status} />
-          <BalanceCard status={status} />
-        </div>
+        <PriceTickers status={status} />
+        <BalanceCard status={status} />
 
         {/* Row 2: Risk Mode + Last Decision */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
